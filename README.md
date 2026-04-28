@@ -20,28 +20,28 @@
 </div>
 
 > **Notice**
-> This is an independent research repository built on the [Ultralytics](https://github.com/ultralytics/ultralytics) codebase. It is not an official Ultralytics project. The upstream copyright notices and the GNU AGPL-3.0 license are retained.
+> Independent research code built on [Ultralytics](https://github.com/ultralytics/ultralytics). Upstream copyright notices and the GNU AGPL-3.0 license are retained.
 
 ## Motivation
 
-> 🎯 **Goal:** make YOLO research comparisons align with the COCO AP used in papers, instead of relying only on the last fixed-epoch checkpoint.
+> 🎯 **Goal:** reduce unfair comparison caused by fixed-epoch training in detection experiments.
 
-| Icon | Problem in common training flows | Why it matters |
+| Icon | Common issue | Impact |
 | --- | --- | --- |
-| 📏 | In-training `mAP` and COCO API AP are not always consistent. | A higher default `mAP` does not necessarily mean a higher paper-reported AP. |
-| ⏱️ | Different models reach their AP peak at different epochs. | Early-converging models may overfit before the final checkpoint is evaluated. |
-| ⚖️ | Fixed-epoch comparison mixes model quality with convergence timing. | Ablation results can become less fair and less convincing. |
+| 📏 | `mAP` != COCO AP | A higher `mAP` may not mean a higher reported AP. |
+| ⏱️ | AP peaks at different epochs | Early models may be evaluated after overfitting. |
+| ⚖️ | Fixed final checkpoint | Results mix model quality with convergence timing. |
 
-**CDP Training Framework** addresses this by running COCO evaluation during training and retaining the checkpoint with the best COCO score.
+**CDP Training Framework** runs COCO evaluation during training and keeps the best-AP checkpoint.
 
-| ✅ Released capability | What it does |
+| ✅ Capability | Function |
 | --- | --- |
-| COCO AP checkpoint selection | Uses COCO `mAP50-95(B)` as the checkpoint fitness signal. |
-| Periodic COCO evaluation | Runs COCO API evaluation every `N` epochs, e.g. every `5` epochs in our experiments. |
-| Strict best-checkpoint update | Prevents non-COCO-evaluated epochs from replacing `best.pt`. |
-| COCO image-id alignment | Maps prediction `image_id` from annotation JSON for custom COCO-style datasets. |
+| COCO AP selection | Uses COCO `mAP50-95(B)` as fitness. |
+| Periodic COCO eval | Runs COCO API every `N` epochs. |
+| Best checkpoint guard | Blocks non-COCO epochs from replacing `best.pt`. |
+| COCO image-id mapping | Aligns prediction `image_id` with annotation JSON. |
 
-In short, this release keeps the training protocol closer to the evaluation protocol used in detection papers.
+In short, training-time checkpoint selection follows the evaluation metric used in detection papers.
 
 ## Qualitative Preview
 
