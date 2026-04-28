@@ -93,6 +93,7 @@ The repository also releases plotting code used for figure-level analysis. The f
 | Qualitative visualization | [`visual.py`](visual.py) | Detection visualization script. |
 | Figure plotting | [`ultralytics/plotfig2.py`](ultralytics/plotfig2.py) | Paper-style plotting script. |
 | 3D visualization | [`ultralytics/3d.py`](ultralytics/3d.py) | 3D visualization helper. |
+| Implementation notes | [`FAIR_COMPARISON_IMPLEMENTATION.md`](FAIR_COMPARISON_IMPLEMENTATION.md) | Detailed change notes for the fair-comparison workflow. |
 
 ## Fair-Comparison Implementation
 
