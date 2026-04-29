@@ -60,8 +60,14 @@ def save_polar_histogram(grad_x, grad_y, title, save_path):
     ax = plt.subplot(111, projection='polar')
     
     bars = ax.bar(bins[:-1], hist, width=width, bottom=0.0)
-    
-    max_h = max(hist)
+
+    # Guard against division-by-zero when all bins are empty
+    # (e.g. flat region after magnitude thresholding).
+    max_h = hist.max() if hist.size else 0
+    if max_h <= 0:
+        plt.close()
+        print(f"[WARN] Empty histogram, skip polar plot: {save_path}")
+        return
     for r, bar in zip(hist, bars):
         bar.set_facecolor(plt.cm.viridis(r / max_h))
         bar.set_alpha(0.85)
@@ -81,7 +87,11 @@ def save_polar_histogram(grad_x, grad_y, title, save_path):
 def compute_visuals_v2(image_path, output_root):
     img_array = np.fromfile(image_path, dtype=np.uint8)
     img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
-    if img is None: return
+    if img is None:
+        # Surface failed decode instead of silently skipping – otherwise
+        # users have no way to know which image was dropped.
+        print(f"[WARN] Failed to decode image, skip: {image_path}")
+        return
 
     filename = os.path.splitext(os.path.basename(image_path))[0]
     # 文件夹名保留中文，方便用户看
@@ -113,9 +123,16 @@ def compute_visuals_v2(image_path, output_root):
                    os.path.join(save_dir, "2_3d_LCGR增强.jpg"), z_label="Enhanced Magnitude")
 
     h, w = gray.shape
-    center_roi_x = sobelx[h//2-50:h//2+50, w//2-50:w//2+50]
-    center_roi_y = sobely[h//2-50:h//2+50, w//2-50:w//2+50]
-    save_polar_histogram(center_roi_x, center_roi_y, "Gradient Orientation Distribution", 
+    # Use an adaptive half-window so small images (< 100px on any side)
+    # don't produce empty / shape-mismatched ROIs that break cartToPolar.
+    half = min(50, h // 2, w // 2)
+    if half <= 0:
+        print(f"[WARN] Image too small for polar ROI, skip: {image_path}")
+        return
+    cy, cx = h // 2, w // 2
+    center_roi_x = sobelx[cy - half:cy + half, cx - half:cx + half]
+    center_roi_y = sobely[cy - half:cy + half, cx - half:cx + half]
+    save_polar_histogram(center_roi_x, center_roi_y, "Gradient Orientation Distribution",
                         os.path.join(save_dir, "3_极坐标_方向分布.jpg"))
 
 def main():
