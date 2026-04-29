@@ -46,8 +46,6 @@ This repository provides the training, evaluation, and visualization utilities u
 | --- | --- | --- |
 | 🧠 Trainer | [`ultralytics/engine/trainer.py`](ultralytics/engine/trainer.py) | COCO fitness and `best.pt` control. |
 | ⏱️ Validator | [`ultralytics/engine/validator.py`](ultralytics/engine/validator.py) | Scheduled JSON and COCO API calls. |
-| 🧪 COCO AP | [`ultralytics/models/yolo/detect/val.py`](ultralytics/models/yolo/detect/val.py) | COCOeval, annotation lookup, image-id mapping. |
-| ⚙️ Config | [`ultralytics/cfg/default.yaml`](ultralytics/cfg/default.yaml) | CDP/COCO fitness switches. |
 | 🚀 Training | [`ultralytics/train.py`](ultralytics/train.py) | Example training entry. |
 | 🖼️ Visualization | [`visual.py`](visual.py) | Qualitative detection view. |
 | 📊 Plotting / 3D | [`plotfig2.py`](plotfig2.py), [`3d.py`](3d.py) | Figure plotting and 3D visualization. |
@@ -94,15 +92,13 @@ Keep your RUOD files in a COCO-style structure and point your YAML to the local 
 RUOD/
 ├─ images/
 │  ├─ train/
-│  ├─ val/
-│  └─ test/
+│  └─ val/
 └─ annotations/
    ├─ instances_train.json
-   ├─ instances_val.json
-   └─ instances_test.json
+   └─ instances_val.json
 ```
 
-Use your dataset YAML to map `train`, `val`, and `test` to local paths.
+Use your dataset YAML to map `train` and `val` to local paths.
 
 ```bash
 python ultralytics/train.py
