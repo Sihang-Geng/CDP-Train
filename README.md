@@ -34,7 +34,7 @@
 | Best checkpoint guard | Blocks non-COCO epochs from replacing `best.pt`. |
 | COCO image-id mapping | Aligns prediction `image_id` with annotation JSON. |
 
-In short, we adjusted the checkpoint selection logic in Ultralytics to align it with the AP-based metrics commonly used in detection papers, thereby supporting fairer model comparisons.
+In short, training-time checkpoint selection follows the evaluation metric used in detection papers.
 
 ## 📦 Released Scope
 
@@ -50,18 +50,39 @@ This repository provides the training, evaluation, and visualization utilities u
 | ⚙️ Config | [`ultralytics/cfg/default.yaml`](ultralytics/cfg/default.yaml) | CDP/COCO fitness switches. |
 | 🚀 Training | [`ultralytics/train.py`](ultralytics/train.py) | Example training entry. |
 | 🖼️ Visualization | [`visual.py`](visual.py) | Qualitative detection view. |
-| 📈 Plotting & 🧊 3D view | [`plotfig2.py`](plotfig2.py), [`3d.py`](3d.py) | Paper-style figure script and 3D visualization helper. |
+| 📊 Plotting / 3D | [`plotfig2.py`](plotfig2.py), [`3d.py`](3d.py) | Figure plotting and 3D visualization. |
 | 📘 Notes | [`FAIR_COMPARISON_IMPLEMENTATION.md`](FAIR_COMPARISON_IMPLEMENTATION.md) | Full implementation notes. |
 
 ## 🛠️ Fair-Comparison Implementation
 
 Detailed changes are in [`FAIR_COMPARISON_IMPLEMENTATION.md`](FAIR_COMPARISON_IMPLEMENTATION.md). In brief, this release adds COCO API evaluation, COCO-based `best.pt` selection, custom COCO JSON lookup, image-id mapping, optimizer fallback, and visualization utilities.
 
-## ⚡ Quick Start
+## 🚀 Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Sihang-Geng/CDP-Train-Independent.git
+cd CDP-Train-Independent
+```
+
+### 2. Create the environment
+
+```bash
+conda create -n CDP python=3.10 -y
+conda activate CDP
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -e .
 pip install pycocotools
+```
+
+Install the PyTorch version that matches your CUDA environment if it is not already available.
+
+```bash
 python ultralytics/train.py
 ```
 
@@ -74,7 +95,7 @@ model = YOLO("/root/ultralytics/ultralytics/cfg/models/v8/yolov8s.yaml")
 
 results = model.train(
     data="/root/ultralytics/ultralytics/cfg/datasets/RUOD/RUOD_YOLO/data.yaml",
-    epochs=300,
+    epochs=250,
     imgsz=640,
     seed=0,
     deterministic=True,
