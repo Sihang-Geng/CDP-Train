@@ -56,16 +56,16 @@ __all__ = (
 
 
 class DFL(nn.Module):
-    """Integral module of Distribution Focal Loss (DFL).
+    """分布焦点损失（DFL）的积分模块。
 
-    Proposed in Generalized Focal Loss https://ieeexplore.ieee.org/document/9792391
+    该模块由 Generalized Focal Loss 提出：https://ieeexplore.ieee.org/document/9792391
     """
 
     def __init__(self, c1: int = 16):
-        """Initialize a convolutional layer with a given number of input channels.
+        """使用指定的输入通道数初始化卷积层。
 
         Args:
-            c1 (int): Number of input channels.
+            c1 (int): 输入通道数。
         """
         super().__init__()
         self.conv = nn.Conv2d(c1, 1, 1, bias=False).requires_grad_(False)
@@ -74,22 +74,22 @@ class DFL(nn.Module):
         self.c1 = c1
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Apply the DFL module to input tensor and return transformed output."""
-        b, _, a = x.shape  # batch, channels, anchors
+        """将 DFL 模块应用于输入张量并返回变换后的输出。"""
+        b, _, a = x.shape  # 批次、通道、锚点
         return self.conv(x.view(b, 4, self.c1, a).transpose(2, 1).softmax(1)).view(b, 4, a)
         # return self.conv(x.view(b, self.c1, 4, a).softmax(1)).view(b, 4, a)
 
 
 class Proto(nn.Module):
-    """Ultralytics YOLO models mask Proto module for segmentation models."""
+    """用于 Ultralytics YOLO 分割模型的掩膜原型模块。"""
 
     def __init__(self, c1: int, c_: int = 256, c2: int = 32):
-        """Initialize the Ultralytics YOLO models mask Proto module with specified number of protos and masks.
+        """使用指定的输入、中间及输出通道数初始化 Ultralytics YOLO 掩膜原型模块。
 
         Args:
-            c1 (int): Input channels.
-            c_ (int): Intermediate channels.
-            c2 (int): Output channels (number of protos).
+            c1 (int): 输入通道数。
+            c_ (int): 中间通道数。
+            c2 (int): 输出通道数（原型数量）。
         """
         super().__init__()
         self.cv1 = Conv(c1, c_, k=3)
@@ -98,23 +98,23 @@ class Proto(nn.Module):
         self.cv3 = Conv(c_, c2)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Perform a forward pass through layers using an upsampled input image."""
+        """使用上采样后的输入图像完成各层前向传播。"""
         return self.cv3(self.cv2(self.upsample(self.cv1(x))))
 
 
 class HGStem(nn.Module):
-    """StemBlock of PPHGNetV2 with 5 convolutions and one maxpool2d.
+    """PPHGNetV2 的 StemBlock，由 5 个卷积层和 1 个最大池化层组成。
 
     https://github.com/PaddlePaddle/PaddleDetection/blob/develop/ppdet/modeling/backbones/hgnet_v2.py
     """
 
     def __init__(self, c1: int, cm: int, c2: int):
-        """Initialize the StemBlock of PPHGNetV2.
+        """初始化 PPHGNetV2 的 StemBlock。
 
         Args:
-            c1 (int): Input channels.
-            cm (int): Middle channels.
-            c2 (int): Output channels.
+            c1 (int): 输入通道数。
+            cm (int): 中间通道数。
+            c2 (int): 输出通道数。
         """
         super().__init__()
         self.stem1 = Conv(c1, cm, 3, 2, act=nn.ReLU())
@@ -125,7 +125,7 @@ class HGStem(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=2, stride=1, padding=0, ceil_mode=True)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass of a PPHGNetV2 backbone layer."""
+        """执行 PPHGNetV2 主干网络层的前向传播。"""
         x = self.stem1(x)
         x = F.pad(x, [0, 1, 0, 1])
         x2 = self.stem2a(x)
