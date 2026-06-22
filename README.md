@@ -7,11 +7,12 @@
 <p>
   <img alt="Python" src="https://img.shields.io/badge/python-3.8%2B-3776AB?logo=python&logoColor=white">
   <img alt="Metric" src="https://img.shields.io/badge/metric-COCO%20AP%20aligned-2E7D32">
-  <img alt="Paper" src="https://img.shields.io/badge/paper-under%20review-orange">
+  <img alt="Paper" src="https://img.shields.io/badge/paper-accepted-brightgreen">
   <a href="https://github.com/Sihang-Geng/CDP-Train/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-AGPL--3.0-blue"></a>
 </p>
 
 <p>
+  <a href="#-framework-overview">Framework</a> ·
   <a href="#-coco-aligned-evaluation-protocol">Protocol</a> ·
   <a href="#-fair-comparison-implementation">Implementation</a> ·
   <a href="#-installation">Installation</a> ·
@@ -28,7 +29,17 @@ This repository provides the official open-source implementation of **CDP**, a c
 | --- | --- |
 | 🧩 **Core idea** | Introduce contour-detail priors to guide robust underwater feature representation. |
 | 📏 **Training protocol** | COCO AP aligned training/evaluation for fair checkpoint selection. |
-| 📝 **Paper status** | The paper is currently under peer review; the full framework figure and technical details will be released after acceptance. |
+| 📝 **Paper status** | Accepted for publication in Optics & Laser Technology. |
+
+## 🧠 Framework Overview
+
+<p align="center">
+  <img src="docs/assets/cdp_yolo_framework.png" alt="CDP-YOLO framework" width="96%">
+</p>
+
+<p align="center">
+  <sub><b>CDP-YOLO framework.</b> CDPB and CDPD preserve contour-detail priors throughout feature extraction and downsampling.</sub>
+</p>
 
 ## 🎯 COCO-Aligned Evaluation Protocol
 
