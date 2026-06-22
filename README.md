@@ -12,7 +12,9 @@
 </p>
 
 <p>
+  <a href="#-underwater-degradation-across-water-conditions">Degradation</a> ·
   <a href="#-framework-overview">Framework</a> ·
+  <a href="#-qualitative-results-across-water-conditions">Results</a> ·
   <a href="#-coco-aligned-evaluation-protocol">Protocol</a> ·
   <a href="#-fair-comparison-implementation">Implementation</a> ·
   <a href="#-installation">Installation</a> ·
@@ -31,14 +33,40 @@ This repository provides the official open-source implementation of **CDP**, a c
 | 📏 **Training protocol** | COCO AP aligned training/evaluation for fair checkpoint selection. |
 | 📝 **Paper status** | Accepted for publication in Optics & Laser Technology. |
 
+## 🌫️ Underwater Degradation Across Water Conditions
+
+Underwater scenes exhibit substantial variation in turbidity, color cast, contrast, and structural cue strength. The figure below pairs representative underwater images with their local Sobel gradient-energy surfaces, showing how contour, texture, and other high-frequency responses weaken under severe degradation.
+
+<p align="center">
+  <img src="docs/assets/underwater_degradation_gradient_analysis.webp" alt="Underwater images and local Sobel gradient-energy distributions across different degradation levels" width="96%">
+</p>
+
+<p align="center">
+  <sub><b>Underwater degradation analysis.</b> Increasing turbidity produces progressively sparser gradient-energy responses before feature extraction.</sub>
+</p>
+
 ## 🧠 Framework Overview
 
 <p align="center">
-  <img src="docs/assets/cdp_yolo_framework.png" alt="CDP-YOLO framework" width="96%">
+  <img src="docs/assets/cdp_yolo_framework.webp" alt="CDP-YOLO framework" width="96%">
 </p>
 
 <p align="center">
   <sub><b>CDP-YOLO framework.</b> CDPB and CDPD preserve contour-detail priors throughout feature extraction and downsampling.</sub>
+</p>
+
+## 🔍 Qualitative Results Across Water Conditions
+
+The following comparisons cover complementary underwater conditions and compare the Baseline, AHFI-Res, and CDP-YOLO in the same row order.
+
+<p align="center">
+  <img src="docs/assets/qualitative_results_occlusion_background.webp" alt="Qualitative detection results under occlusion and background interference" width="100%">
+  <br>
+  <img src="docs/assets/qualitative_results_severe_degradation.webp" alt="Qualitative detection results under severe degradation and dense small-target distribution" width="100%">
+</p>
+
+<p align="center">
+  <sub><b>Qualitative comparisons.</b> Top: occlusion, background interference, and target-scale variation. Bottom: severe color cast, low contrast, and dense small-target distribution. Pass, Fail, and Extra counts are summarized on the right.</sub>
 </p>
 
 ## 🎯 COCO-Aligned Evaluation Protocol
